@@ -1,7 +1,7 @@
-# Theme: cyberdream
-# Based on the cyberdream color palette
+# cyberdream.nvim theme for btop
+# https://github.com/scottmckendry/cyberdream.nvim
 
-# Main bg
+# Main background, empty for terminal default, need to be empty if you want transparent background
 theme[main_bg]="#16181a"
 
 # Main text color
@@ -20,62 +20,70 @@ theme[selected_bg]="#3c4048"
 theme[selected_fg]="#ffffff"
 
 # Color of inactive/disabled text
-theme[inactive_fg]="#3c4048"
+theme[inactive_fg]="#7b8496"
+
+# Color of text appearing on top of graphs, i.e uptime and current network graph scaling
+theme[graph_text]="#ffffff"
+
+# Background color of the percentage meters
+theme[meter_bg]="#3c4048"
 
 # Misc colors for processes box including mini cpu graphs, details memory graph and details status text
-theme[proc_misc]="#5ea1ff"
+theme[proc_misc]="#5ef1ff"
 
-# Cpu box outline color
+# Box outline color
 theme[cpu_box]="#3c4048"
-
-# Memory/disks box outline color
 theme[mem_box]="#3c4048"
-
-# Net up/down box outline color
 theme[net_box]="#3c4048"
-
-# Processes box outline color
 theme[proc_box]="#3c4048"
 
 # Box divider line and small boxes line color
 theme[div_line]="#3c4048"
 
-# Temperature graph colors
-theme[temp_start]="#5eff6c"
-theme[temp_mid]="#f1ff5e"
-theme[temp_end]="#ff6e5e"
+# Graph colors (Cyan -> Purple)
+theme[temp_start]="#5ef1ff"
+theme[temp_mid]="#8da7ff"
+theme[temp_end]="#bd5eff"
 
-# CPU graph colors
-theme[cpu_start]="#5eff6c"
-theme[cpu_mid]="#f1ff5e"
-theme[cpu_end]="#ff6e5e"
+theme[cpu_start]="#5ef1ff"
+theme[cpu_mid]="#8da7ff"
+theme[cpu_end]="#bd5eff"
 
-# Mem/Disk free meter
-theme[free_start]="#5eff6c"
-theme[free_mid]="#f1ff5e"
-theme[free_end]="#ff6e5e"
+theme[free_start]="#5ef1ff"
+theme[free_mid]="#8da7ff"
+theme[free_end]="#bd5eff"
 
-# Mem/Disk cached meter
-theme[cached_start]="#5eff6c"
-theme[cached_mid]="#f1ff5e"
-theme[cached_end]="#ff6e5e"
+theme[cached_start]="#5ef1ff"
+theme[cached_mid]="#8da7ff"
+theme[cached_end]="#bd5eff"
 
-# Mem/Disk available meter
-theme[available_start]="#5eff6c"
-theme[available_mid]="#f1ff5e"
-theme[available_end]="#ff6e5e"
+theme[available_start]="#5ef1ff"
+theme[available_mid]="#8da7ff"
+theme[available_end]="#bd5eff"
 
-# Mem/Disk used meter
-theme[used_start]="#5eff6c"
-theme[used_mid]="#f1ff5e"
-theme[used_end]="#ff6e5e"
+theme[used_start]="#5ef1ff"
+theme[used_mid]="#8da7ff"
+theme[used_end]="#bd5eff"
 
-# Download graph colors
-theme[download_start]="#5eff6c"
-theme[download_mid]="#5ef1ff"
-theme[download_end]="#5ea1ff"
+theme[download_start]="#5ef1ff"
+theme[download_mid]="#8da7ff"
+theme[download_end]="#bd5eff"
 
-# Upload graph colors
-theme[upload_start]="#5eff6c"
-theme[upload_mid]="#5ef1ff"
-theme[upload_end]="#5ea1ff"
+theme[upload_start]="#5ef1ff"
+theme[upload_mid]="#8da7ff"
+theme[upload_end]="#bd5eff"
+
+# Process box color gradient for threads, mem and cpu usage
+theme[process_start]="#5ea1ff"
+theme[process_mid]="#bd5eff"
+theme[process_end]="#ff5ef1"
+
+# Graph gradient shades: bg -> bg_alt -> bg_highlight -> grey, then grey interpolated to fg
+theme[gradient_color_0]="#16181a"
+theme[gradient_color_1]="#1e2124"
+theme[gradient_color_2]="#3c4048"
+theme[gradient_color_3]="#7b8496"
+theme[gradient_color_4]="#959cab"
+theme[gradient_color_5]="#b8bdc7"
+theme[gradient_color_6]="#dbdde2"
+theme[gradient_color_7]="#ffffff"

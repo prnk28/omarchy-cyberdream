@@ -1,0 +1,48 @@
+# Cyberdream for Omarchy
+#
+# Every hex below is taken verbatim from the upstream palette:
+# https://github.com/scottmckendry/cyberdream.nvim/blob/main/lua/cyberdream/colors.lua
+#
+# Omarchy derives the rest of the palette from these keys:
+#   dark_background   = background mixed 25% black -> #111214
+#   darker_background = background mixed 50% black -> #0b0c0d
+#   light/bright_foreground, cursor, selection_foreground = foreground -> #ffffff
+#   brown             = orange mixed 50% black     -> #805f2f
+#   bright_* default to their base hue, matching upstream's flat ANSI palette.
+
+mode = "dark"
+
+accent    = "#5ea1ff" # blue
+selection = "#3c4048" # bg_highlight
+muted     = "#7b8496" # grey - ANSI 8, comments, inactive text (base16 base03)
+
+background         = "#16181a" # bg
+lighter_background = "#1e2124" # bg_alt
+foreground         = "#ffffff" # fg
+# Pinned, not derived: Omarchy resolves dark_foreground before color8 aliases to
+# muted, so leaving it out would make Neovim's dim text and comments pure white.
+dark_foreground    = "#7b8496" # grey
+
+red     = "#ff6e5e"
+green   = "#5eff6c"
+yellow  = "#f1ff5e"
+blue    = "#5ea1ff"
+magenta = "#bd5eff" # purple - upstream maps ANSI 5/13 to purple, not magenta
+cyan    = "#5ef1ff"
+orange  = "#ffbd5e"
+
+bright_red     = "#ff6e5e"
+bright_green   = "#5eff6c"
+bright_yellow  = "#f1ff5e"
+bright_blue    = "#5ea1ff"
+bright_magenta = "#bd5eff"
+bright_cyan    = "#5ef1ff"
+
+# Cyberdream hues Omarchy has no slot for. Not used by the built-in templates,
+# but available to any ~/.config/omarchy/themed/*.tpl as {{ pink }}/{{ fuchsia }}.
+pink    = "#ff5ea0"
+fuchsia = "#ff5ef1"
+
+# Window/notification/menu borders sweep blue -> cyan.
+hyprland_active_border   = "accent cyan 45deg"
+hyprland_inactive_border = "selection"
