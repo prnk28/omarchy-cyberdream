@@ -24,6 +24,14 @@ Requires Omarchy 4.x (the `colors.toml` theme format).
 | --- | --- |
 | ![Omarchy menu](screenshots/menu.webp) | ![Terminal palette](screenshots/terminal.webp) |
 
+### Wallpapers
+
+Six 3840×2159 wallpapers in `backgrounds/`, in switcher order
+(`Super + Ctrl + Space`) — neon canyon, glowing alpine forest, sun-gate arch,
+magenta lakeside sunset, laser cityscape, bioluminescent ruins:
+
+![Cyberdream wallpapers](screenshots/wallpapers.webp)
+
 ## Palette
 
 Every colour is taken verbatim from
@@ -68,7 +76,7 @@ Two deliberate deviations from the upstream terminal extras:
 | `btop.theme` | Upstream cyberdream btop theme (cyan → purple graphs). |
 | `helix.toml` | Upstream cyberdream Helix theme. |
 | `icons.theme` | `Yaru-blue`, matching the blue accent. |
-| `backgrounds/` | Five abstract gradient wallpapers (`Super + Ctrl + Space` opens the switcher). |
+| `backgrounds/` | Six 4K neon-landscape wallpapers (`Super + Ctrl + Space` opens the switcher). |
 | `preview.png` | 1800×1012 preview for the theme switcher. |
 
 From `colors.toml` alone, Omarchy regenerates and retints: Alacritty, Foot,
@@ -119,6 +127,14 @@ To refresh `preview.png` after a layout change:
 ```bash
 grim -o <output> /tmp/shot.png
 magick /tmp/shot.png -resize '1800x1012!' -strip preview.png
+```
+
+To rebuild `screenshots/wallpapers.webp` after changing `backgrounds/`:
+
+```bash
+magick montage backgrounds/*.jpg -tile 3x2 -geometry 464x261+4+4 \
+  -background '#16181a' -strip -quality 80 -define webp:method=6 \
+  screenshots/wallpapers.webp
 ```
 
 ## Listing on omarchy.org
