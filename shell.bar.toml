@@ -1,0 +1,11 @@
+# Glass bar. Omarchy merges shell.<section>.toml over the generated shell.toml,
+# so this replaces the whole [bar] section -- every key the section owns has to
+# be here, and the colors are literal because theme files are not templated.
+[bar]
+background       = "#16181a"
+background-alpha = 0.62
+text             = "#ffffff"
+active           = "#ff6e5e"
+scale-with-font  = true
+size-horizontal  = 26
+size-vertical    = 28

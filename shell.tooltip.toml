@@ -1,0 +1,7 @@
+# Hover tooltips across the bar, panels, and buttons.
+[tooltip]
+background       = "#16181a"
+background-alpha = 0.82
+text             = "#ffffff"
+border           = "hyprland.active-border-foreground"
+border-alpha     = 1.0

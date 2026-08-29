@@ -1,0 +1,14 @@
+# Menu cards and rows. Clipboard and emojis inherit these tokens.
+[menu]
+background                = "#16181a"
+background-alpha          = 0.8
+text                      = "#ffffff"
+border                    = "hyprland.active-border-foreground"
+border-alpha              = 1.0
+scrim                     = "#16181a"
+scrim-alpha               = 0.4
+selected-background       = "#ffffff"
+selected-background-alpha = 0.1
+selected-text             = "#5ea1ff"
+selected-border           = "hyprland.active-border-foreground"
+selected-border-alpha     = 0.25
