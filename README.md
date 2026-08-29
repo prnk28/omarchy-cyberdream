@@ -149,9 +149,11 @@ none of them are applied by installing the theme.
 | herdr | `extras/herdr.toml` | merge into `~/.config/herdr/config.toml`, then `herdr server reload-config`. Base theme `terminal` inherits Omarchy's ANSI palette; this pins the chrome herdr paints itself — the spaces rail, the kitty-style tab plate, agent-state marks — and turns pane borders off. |
 | k9s | `extras/k9s.yaml` | `~/.config/k9s/skins/cyberdream.yaml`, then `skin: cyberdream` in `config.yaml` |
 | kitty tab bar | `extras/kitty.conf.tpl` | `~/.config/omarchy/themed/kitty.conf.tpl`, then `omarchy theme refresh`. Omarchy's own kitty template sets only `active_tab_background`, leaving kitty's `#999999` grey strip and black active-tab title; this replaces the template for every theme and derives the whole tab bar from the palette. |
+| lazydocker | `extras/lazydocker.yml` | merge into `~/.config/lazydocker/config.yml` |
 | lazygit | `extras/lazygit.yml` | merge into `~/.config/lazygit/config.yml` |
 | lsd | `extras/lsd-colors.yaml` | `~/.config/lsd/colors.yaml` |
-| opencode | `extras/opencode.json` | `~/.config/opencode/themes/cyberdream.json`, then `"theme": "cyberdream"` |
+| omp | `extras/omp.json` | `~/.omp/agent/themes/cyberdream.json`, then `omp config set theme.dark cyberdream`. Omarchy retints Pi, but omp keeps its own custom-theme dir and never reads Pi's. |
+| opencode | `extras/opencode.json` | `~/.config/opencode/themes/cyberdream.json`, then `"theme": "cyberdream"` in `~/.config/opencode/tui.json` (older builds keep it in `opencode.json`) |
 | Papirus folders | `extras/papirus-cyberdream.sh` | run it — it derives a `cyberdream` folder colour from Papirus's violet artwork (`#bd5eff` face, matching shades under it) and selects it with `papirus-folders`. `--color blue` and `--color cyan` give the other two palette accents. |
 | vivid (`LS_COLORS`) | `extras/vivid-cyberdream.yml` | `~/.config/vivid/themes/cyberdream.yml`, then `export LS_COLORS="$(vivid generate cyberdream)"` |
 | waybar | `extras/waybar.css.tpl` | `~/.config/omarchy/themed/waybar.css.tpl`, then `omarchy theme refresh`. Omarchy 4 generates no `waybar.css` (the bar is Quickshell), so a waybar config that imports one gets GTK grey; this renders the palette for every theme. Import it from `style.css` with an absolute path to `~/.local/state/omarchy/current/theme/waybar.css`. |
