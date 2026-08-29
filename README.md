@@ -26,9 +26,10 @@ Requires Omarchy 4.x (the `colors.toml` theme format).
 
 ### Wallpapers
 
-Six 3840×2159 wallpapers in `backgrounds/`, in switcher order
-(`Super + Ctrl + Space`) — neon canyon, glowing alpine forest, sun-gate arch,
-magenta lakeside sunset, laser cityscape, bioluminescent ruins:
+Six wallpapers in `backgrounds/`, in switcher order (`Super + Ctrl + Space`) —
+fire lookout over a magenta pine forest, a neon great wave, a loaded van on a
+foggy roadside, a crimson moon over a misty lake, a blossom tree shedding petals
+into a sunset, and a rain-slick neon street:
 
 ![Cyberdream wallpapers](screenshots/wallpapers.webp)
 
@@ -116,7 +117,8 @@ omarchy theme set cyberdream
 | `btop.theme` | Upstream cyberdream btop theme (cyan → purple graphs). |
 | `helix.toml` | Upstream cyberdream Helix theme. |
 | `icons.theme` | `Yaru-blue`, matching the blue accent. |
-| `backgrounds/` | Six 4K neon-landscape wallpapers (`Super + Ctrl + Space` opens the switcher). |
+| `gtk.css` | GTK 3 / GTK 4 / libadwaita colours for Nautilus, file choosers and GNOME dialogs. Omarchy generates none, so without it GTK apps stay Adwaita grey. Link it once: `ln -sfn ~/.local/state/omarchy/current/theme/gtk.css ~/.config/gtk-3.0/gtk.css` (and `gtk-4.0`). |
+| `backgrounds/` | Six neon wallpapers, 4K or larger except the 2560×1700 street shot (`Super + Ctrl + Space` opens the switcher). |
 | `preview.png` | 1800×1012 preview for the theme switcher. |
 
 From `colors.toml` alone, Omarchy regenerates and retints: Alacritty, Foot,
@@ -143,12 +145,14 @@ none of them are applied by installing the theme.
 | delta | `extras/delta.gitconfig` | append to `~/.config/git/config`, then set `[delta] features = cyberdream` |
 | fish | `extras/fish.theme` | `~/.config/fish/themes/cyberdream.theme`, then `fish_config theme choose cyberdream` |
 | gitui | `extras/gitui.ron` | `~/.config/gitui/theme.ron` |
+| herdr | `extras/herdr.toml` | merge into `~/.config/herdr/config.toml`, then `herdr server reload-config`. Base theme `terminal` inherits Omarchy's ANSI palette; this pins the chrome herdr paints itself — the spaces rail, the kitty-style tab plate, agent-state marks — and turns pane borders off. |
 | k9s | `extras/k9s.yaml` | `~/.config/k9s/skins/cyberdream.yaml`, then `skin: cyberdream` in `config.yaml` |
 | kitty tab bar | `extras/kitty.conf.tpl` | `~/.config/omarchy/themed/kitty.conf.tpl`, then `omarchy theme refresh`. Omarchy's own kitty template sets only `active_tab_background`, leaving kitty's `#999999` grey strip and black active-tab title; this replaces the template for every theme and derives the whole tab bar from the palette. |
 | lazygit | `extras/lazygit.yml` | merge into `~/.config/lazygit/config.yml` |
 | lsd | `extras/lsd-colors.yaml` | `~/.config/lsd/colors.yaml` |
 | opencode | `extras/opencode.json` | `~/.config/opencode/themes/cyberdream.json`, then `"theme": "cyberdream"` |
 | vivid (`LS_COLORS`) | `extras/vivid-cyberdream.yml` | `~/.config/vivid/themes/cyberdream.yml`, then `export LS_COLORS="$(vivid generate cyberdream)"` |
+| waybar | `extras/waybar.css.tpl` | `~/.config/omarchy/themed/waybar.css.tpl`, then `omarchy theme refresh`. Omarchy 4 generates no `waybar.css` (the bar is Quickshell), so a waybar config that imports one gets GTK grey; this renders the palette for every theme. Import it from `style.css` with an absolute path to `~/.local/state/omarchy/current/theme/waybar.css`. |
 | yazi | `extras/yazi-theme.toml` | `~/.config/yazi/theme.toml` |
 | zed | `extras/zed-cyberdream.json` | `~/.config/zed/themes/cyberdream.json` |
 
@@ -174,10 +178,19 @@ magick /tmp/shot.png -resize '1800x1012!' -strip preview.png
 To rebuild `screenshots/wallpapers.webp` after changing `backgrounds/`:
 
 ```bash
-magick montage backgrounds/*.jpg -tile 3x2 -geometry 464x261+4+4 \
+rm -rf /tmp/wpthumbs && mkdir -p /tmp/wpthumbs
+for f in backgrounds/*.jpg; do
+  magick "$f" -resize '464x261^' -gravity center -extent 464x261 \
+    -strip /tmp/wpthumbs/"$(basename "$f" .jpg)".png
+done
+magick montage /tmp/wpthumbs/*.png -tile 3x2 -geometry +4+4 \
   -background '#16181a' -strip -quality 80 -define webp:method=6 \
   screenshots/wallpapers.webp
 ```
+
+The wallpapers are not all 16:9, so each one is cropped to fill its cell first —
+`montage -geometry 464x261` alone would letterbox the odd sizes and leave the
+grid ragged.
 
 ## Listing on omarchy.org
 
