@@ -68,11 +68,51 @@ Two deliberate deviations from the upstream terminal extras:
 - Window, notification, and menu borders use a `blue → cyan` 45° gradient
   (`hyprland_active_border`), with `bg_highlight` for inactive borders.
 
+## Liquid glass
+
+Omarchy ships `blur.enabled = false`, `shadow.enabled = false` and
+`rounding = 0`; `hyprland.lua` is what turns the glass on.
+
+| Knob | Value | Why |
+| --- | --- | --- |
+| `decoration.rounding` | `8` | Slightly rounded — reads as glass, not as a pill. |
+| `decoration.blur` | `size 6`, `passes 3`, `brightness 0.75`, `contrast 1.15`, `vibrancy 0.25`, `noise 0.015` | Near-black neon palette: the backdrop is dimmed and lifted so a 4K wallpaper never competes with the text on top of it. |
+| `decoration.blur.ignore_opacity` | `true` | Apps that cannot render a transparent background themselves (Chromium-family, Electron) show blurred glass instead of raw wallpaper when Hyprland fades them. |
+| `decoration.shadow` | `range 16`, active `rgba(5ea1ff27)`, inactive `rgba(0b0c0d99)` | The focused window sits in a faint accent bloom; everything else gets plain depth. |
+| window opacity | `0.98 0.92` for Omarchy's `default-opacity` tag, `1.0 1.0` for terminals and video | Terminals carry their own alpha (`background_opacity`), so the compositor must not multiply it. |
+| borders | `#5ea1ff → #5ef1ff` at 45°, alpha `ee`/`bb`; inactive `#3c4048aa` | The palette's blue → cyan sweep, carried at glass alpha as a lit edge. |
+| layer blur | `omarchy-bar`, `-menu`, `-notifications`, `-osd`, `-clipboard`, `-emojis`, `-polkit`, `-reminders`, panels | Omarchy 4's Quickshell surfaces. The wallpaper layer and bar drag ghosts stay out. |
+
+The shell surfaces themselves are translucent through the `shell.*.toml` files —
+bar `0.62`, launcher/notifications/popups `0.78`, menu `0.80`, tooltip `0.82`.
+Each file replaces one section of the `shell.toml` Omarchy generates, so their
+colours are literal rather than templated.
+
+### On a repo install, the Lua is dropped
+
+`omarchy theme install` refuses code from a cloned theme, so Omarchy ignores
+`hyprland.lua` (it names the file on stderr) and generates a borders-only one
+from `colors.toml`. The `shell.*.toml` translucency survives; blur, rounding and
+shadows do not. Two ways to get them back:
+
+```bash
+# 1. Load the theme's file as your own look'n'feel. It then applies to every
+#    theme you switch to, so merge rather than clobber if that file is not empty.
+cp ~/.config/omarchy/themes/cyberdream/hyprland.lua ~/.config/hypr/looknfeel.lua
+
+# 2. Or install the theme as your own working copy, which Omarchy trusts:
+git clone https://github.com/prdlk/omarchy-cyberdream
+ln -sfn "$PWD/omarchy-cyberdream" ~/.config/omarchy/themes/cyberdream
+omarchy theme set cyberdream
+```
+
 ## What this theme ships
 
 | File | Purpose |
 | --- | --- |
 | `colors.toml` | The palette. Omarchy generates everything else from it. |
+| `hyprland.lua` | The glass: blur, rounded corners, shadows, borders, per-window opacity, layer blur. |
+| `shell.bar.toml`, `shell.menu.toml`, `shell.launcher.toml`, `shell.popups.toml`, `shell.notifications.toml`, `shell.tooltip.toml` | Translucency for the Omarchy shell surfaces; each overrides one section of the generated `shell.toml`. |
 | `btop.theme` | Upstream cyberdream btop theme (cyan → purple graphs). |
 | `helix.toml` | Upstream cyberdream Helix theme. |
 | `icons.theme` | `Yaru-blue`, matching the blue accent. |
@@ -87,8 +127,9 @@ RGB. Nothing in this repo needs to duplicate those.
 
 A theme installed from a git repo may not ship code, so Omarchy drops any
 `*.lua`, terminal config, or `vscode.json` it finds and regenerates them from
-`colors.toml`. This repo deliberately ships none of those files, so installing
-it drops nothing. Neovim users who want the real thing can install
+`colors.toml`. Of those, this repo ships only `hyprland.lua` — see
+[On a repo install, the Lua is dropped](#on-a-repo-install-the-lua-is-dropped).
+Neovim users who want the real thing can install
 [cyberdream.nvim](https://github.com/scottmckendry/cyberdream.nvim) directly.
 
 ## Extras
@@ -103,6 +144,7 @@ none of them are applied by installing the theme.
 | fish | `extras/fish.theme` | `~/.config/fish/themes/cyberdream.theme`, then `fish_config theme choose cyberdream` |
 | gitui | `extras/gitui.ron` | `~/.config/gitui/theme.ron` |
 | k9s | `extras/k9s.yaml` | `~/.config/k9s/skins/cyberdream.yaml`, then `skin: cyberdream` in `config.yaml` |
+| kitty tab bar | `extras/kitty.conf.tpl` | `~/.config/omarchy/themed/kitty.conf.tpl`, then `omarchy theme refresh`. Omarchy's own kitty template sets only `active_tab_background`, leaving kitty's `#999999` grey strip and black active-tab title; this replaces the template for every theme and derives the whole tab bar from the palette. |
 | lazygit | `extras/lazygit.yml` | merge into `~/.config/lazygit/config.yml` |
 | lsd | `extras/lsd-colors.yaml` | `~/.config/lsd/colors.yaml` |
 | opencode | `extras/opencode.json` | `~/.config/opencode/themes/cyberdream.json`, then `"theme": "cyberdream"` |
