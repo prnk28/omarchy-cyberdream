@@ -1,0 +1,170 @@
+/* Cyberdream for GTK 3 and GTK 4 / libadwaita.
+ *
+ * Omarchy generates no gtk.css, so a theme either ships one or GTK apps —
+ * Nautilus, the file chooser every app opens, GNOME dialogs — stay Adwaita grey
+ * next to a near-black neon desktop.
+ *
+ * Link it once and it follows every theme switch:
+ *
+ *   ln -sfn ~/.local/state/omarchy/current/theme/gtk.css ~/.config/gtk-3.0/gtk.css
+ *   ln -sfn ~/.local/state/omarchy/current/theme/gtk.css ~/.config/gtk-4.0/gtk.css
+ *
+ * `background` carries alpha so GTK windows sit on the same blurred glass as
+ * the terminals; `hyprland.lua` tags them with Omarchy's `default-opacity`
+ * rule, and `blur.ignore_opacity` makes the compositor blur what shows through.
+ */
+
+@define-color background     #16181ae6;
+@define-color solid_background #16181a;
+@define-color surface        #1e2124;
+@define-color surface_dim    #111214;
+@define-color foreground     #ffffff;
+@define-color muted          #7b8496;
+@define-color selection      #3c4048;
+
+@define-color black          #16181a;
+@define-color red            #ff6e5e;
+@define-color green          #5eff6c;
+@define-color yellow         #f1ff5e;
+@define-color blue           #5ea1ff;
+@define-color magenta        #bd5eff;
+@define-color cyan           #5ef1ff;
+@define-color orange         #ffbd5e;
+@define-color pink           #ff5ea0;
+@define-color white          #ffffff;
+@define-color bright_black   #7b8496;
+
+/* libadwaita */
+@define-color accent_bg_color @blue;
+@define-color accent_fg_color @solid_background;
+@define-color accent_color @blue;
+
+@define-color window_bg_color @background;
+@define-color window_fg_color @foreground;
+
+@define-color view_bg_color @background;
+@define-color view_fg_color @foreground;
+
+@define-color sidebar_bg_color alpha(@surface_dim, 0.9);
+@define-color sidebar_fg_color @foreground;
+@define-color sidebar_backdrop_color alpha(@surface_dim, 0.9);
+@define-color sidebar_shade_color alpha(@black, 0.6);
+@define-color secondary_sidebar_bg_color alpha(@surface_dim, 0.9);
+@define-color secondary_sidebar_fg_color @foreground;
+
+@define-color headerbar_bg_color alpha(@surface, 0.92);
+@define-color headerbar_fg_color @foreground;
+@define-color headerbar_border_color @selection;
+@define-color headerbar_backdrop_color alpha(@solid_background, 0.92);
+@define-color headerbar_shade_color alpha(@black, 0.5);
+
+@define-color card_bg_color alpha(@surface, 0.85);
+@define-color card_fg_color @foreground;
+@define-color card_shade_color alpha(@black, 0.5);
+
+@define-color popover_bg_color @surface;
+@define-color popover_fg_color @foreground;
+@define-color popover_shade_color alpha(@black, 0.6);
+
+@define-color dialog_bg_color @surface;
+@define-color dialog_fg_color @foreground;
+
+@define-color thumbnail_bg_color @surface;
+@define-color thumbnail_fg_color @foreground;
+
+@define-color destructive_bg_color @red;
+@define-color destructive_fg_color @solid_background;
+@define-color destructive_color @red;
+
+@define-color success_bg_color @green;
+@define-color success_fg_color @solid_background;
+@define-color success_color @green;
+
+@define-color warning_bg_color @yellow;
+@define-color warning_fg_color @solid_background;
+@define-color warning_color @yellow;
+
+@define-color error_bg_color @red;
+@define-color error_fg_color @solid_background;
+@define-color error_color @red;
+
+@define-color borders @selection;
+
+/* GTK 3 */
+@define-color theme_fg_color @foreground;
+@define-color theme_text_color @foreground;
+@define-color theme_bg_color @background;
+@define-color theme_base_color @background;
+@define-color theme_selected_bg_color @blue;
+@define-color theme_selected_fg_color @solid_background;
+@define-color insensitive_bg_color @background;
+@define-color insensitive_fg_color @muted;
+@define-color insensitive_base_color @surface_dim;
+@define-color theme_unfocused_fg_color @foreground;
+@define-color theme_unfocused_text_color @foreground;
+@define-color theme_unfocused_bg_color @background;
+@define-color theme_unfocused_base_color @background;
+@define-color theme_unfocused_selected_bg_color @selection;
+@define-color theme_unfocused_selected_fg_color @foreground;
+@define-color unfocused_insensitive_color @muted;
+@define-color unfocused_borders @selection;
+
+@define-color content_view_bg @background;
+@define-color text_view_bg @background;
+
+/* The accent sweep the window borders use, carried onto the widgets that own a
+ * whole edge: the sidebar rail and the header bar's bottom rule. */
+headerbar,
+.titlebar {
+  border-bottom: 1px solid @selection;
+}
+
+.sidebar-pane,
+.navigation-sidebar {
+  border-right: 1px solid @selection;
+}
+
+/* Selected rows: the accent as a lit plate rather than a solid block, so white
+ * labels stay legible on top of it. No inset edge marker — libadwaita rounds
+ * the row, so a left bar renders as a clipped sliver against the corner. */
+.navigation-sidebar > row:selected,
+row.activatable:selected,
+gridview child:selected,
+listview row:selected {
+  background-color: alpha(@blue, 0.22);
+  color: @foreground;
+}
+
+.navigation-sidebar > row:hover,
+row.activatable:hover {
+  background-color: alpha(@foreground, 0.06);
+}
+
+entry:focus-within,
+searchbar entry:focus-within {
+  outline-color: @blue;
+  border-color: @blue;
+}
+
+progressbar > trough > progress,
+levelbar block.filled {
+  background-color: @blue;
+}
+
+/* Nautilus paints the path bar and status bar itself. */
+.path-bar-box button:checked,
+.path-bar button:checked {
+  background-color: alpha(@blue, 0.22);
+  color: @foreground;
+}
+
+banner revealer widget {
+  background-color: @surface;
+  color: @foreground;
+  padding: 5px;
+}
+
+toast {
+  background-color: @surface;
+  color: @foreground;
+}
