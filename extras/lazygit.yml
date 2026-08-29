@@ -8,7 +8,7 @@ gui:
         searchingActiveBorderColor:
             - "#ff5ef1"
         optionsTextColor:
-            - "#3c4048"
+            - "#7b8496"
         selectedLineBgColor:
             - "#3c4048"
         cherryPickedCommitBgColor:
