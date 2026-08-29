@@ -1,0 +1,45 @@
+# Cyberdream for herdr — merge into ~/.config/herdr/config.toml, then
+# `herdr server reload-config` (or `omarchy restart herdr`).
+#
+# The base is herdr's `terminal` theme, which reads the ANSI palette Omarchy
+# already generates from colors.toml, so pane text stays in sync with every
+# other terminal. Only the chrome herdr paints itself is pinned here, because
+# the ANSI palette has no slot for it.
+
+[ui]
+# Borderless, like the compositor: panes are told apart by the gap between them
+# and by the terminal background, not by a drawn frame. Hyprland already puts a
+# gradient border around the window; a second frame inside it is noise.
+pane_borders = false
+pane_outer_borders = false
+
+accent = "#5ea1ff"
+
+[theme]
+name = "terminal"
+auto_switch = false
+
+[theme.custom]
+# Panes keep the terminal's own background, so kitty's translucency, and the
+# Hyprland blur under it, survive inside herdr.
+panel_bg = "reset"
+
+# Surfaces: bg for the spaces rail, bg_alt for the row under the cursor,
+# bg_highlight for selection — the same three-step ramp as the rest of the theme.
+sidebar_bg = "#16181a"
+active_row_bg = "#1e2124"
+selection_bg = "#3c4048"
+
+# `accent` fills the active tab and `surface_dim` writes its label, so the pair
+# is set to the same plate kitty's tab bar uses: the accent mixed 20% into the
+# background, with the accent itself for the title. A raw #5ea1ff fill would put
+# a neon block above the panes and swallow the label.
+accent = "#243348"
+surface_dim = "#5ea1ff"
+
+# Agent-state marks.
+green = "#5eff6c"
+yellow = "#f1ff5e"
+red = "#ff6e5e"
+peach = "#ffbd5e"
+mauve = "#bd5eff"
