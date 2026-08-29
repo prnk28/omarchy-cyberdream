@@ -101,7 +101,8 @@ shadows do not. Two ways to get them back:
 #    theme you switch to, so merge rather than clobber if that file is not empty.
 cp ~/.config/omarchy/themes/cyberdream/hyprland.lua ~/.config/hypr/looknfeel.lua
 
-# 2. Or install the theme as your own working copy, which Omarchy trusts:
+# 2. Or point the theme directory at your own working copy. Omarchy only
+#    withholds Lua from a *directory* with a .git in it; a symlink is yours.
 git clone https://github.com/prdlk/omarchy-cyberdream
 ln -sfn "$PWD/omarchy-cyberdream" ~/.config/omarchy/themes/cyberdream
 omarchy theme set cyberdream
