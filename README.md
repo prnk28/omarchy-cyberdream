@@ -117,7 +117,7 @@ omarchy theme set cyberdream
 | `shell.bar.toml`, `shell.menu.toml`, `shell.launcher.toml`, `shell.popups.toml`, `shell.notifications.toml`, `shell.tooltip.toml` | Translucency for the Omarchy shell surfaces; each overrides one section of the generated `shell.toml`. |
 | `btop.theme` | Upstream cyberdream btop theme (cyan → purple graphs). |
 | `helix.toml` | Upstream cyberdream Helix theme. |
-| `icons.theme` | `Yaru-blue`, matching the blue accent. |
+| `icons.theme` | `Papirus-Dark` — flat, dark, and the only widely packaged set whose folders can be recoloured to the palette. Install it with `pacman -S papirus-icon-theme`; without it GTK falls back to Adwaita. `extras/papirus-cyberdream.sh` turns the folders neon. |
 | `gtk.css` | GTK 3 / GTK 4 / libadwaita colours for Nautilus, file choosers and GNOME dialogs. Omarchy generates none, so without it GTK apps stay Adwaita grey. Link it once: `ln -sfn ~/.local/state/omarchy/current/theme/gtk.css ~/.config/gtk-3.0/gtk.css` (and `gtk-4.0`). |
 | `backgrounds/` | Six neon wallpapers, 4K or larger except the 2560×1700 street shot (`Super + Ctrl + Space` opens the switcher). |
 | `preview.png` | 1800×1012 preview for the theme switcher. |
@@ -152,6 +152,7 @@ none of them are applied by installing the theme.
 | lazygit | `extras/lazygit.yml` | merge into `~/.config/lazygit/config.yml` |
 | lsd | `extras/lsd-colors.yaml` | `~/.config/lsd/colors.yaml` |
 | opencode | `extras/opencode.json` | `~/.config/opencode/themes/cyberdream.json`, then `"theme": "cyberdream"` |
+| Papirus folders | `extras/papirus-cyberdream.sh` | run it — it derives a `cyberdream` folder colour from Papirus's violet artwork (`#bd5eff` face, matching shades under it) and selects it with `papirus-folders`. `--color blue` and `--color cyan` give the other two palette accents. |
 | vivid (`LS_COLORS`) | `extras/vivid-cyberdream.yml` | `~/.config/vivid/themes/cyberdream.yml`, then `export LS_COLORS="$(vivid generate cyberdream)"` |
 | waybar | `extras/waybar.css.tpl` | `~/.config/omarchy/themed/waybar.css.tpl`, then `omarchy theme refresh`. Omarchy 4 generates no `waybar.css` (the bar is Quickshell), so a waybar config that imports one gets GTK grey; this renders the palette for every theme. Import it from `style.css` with an absolute path to `~/.local/state/omarchy/current/theme/waybar.css`. |
 | yazi | `extras/yazi-theme.toml` | `~/.config/yazi/theme.toml` |
