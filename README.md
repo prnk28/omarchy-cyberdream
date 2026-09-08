@@ -16,7 +16,9 @@ omarchy theme install https://github.com/prdlk/omarchy-cyberdream
 
 Remove it again with **Remove → Theme**, or `omarchy theme remove cyberdream`.
 
-Requires Omarchy 4.x (the `colors.toml` theme format).
+Omarchy 4.x only: the palette is a `colors.toml`, and the repo ships no Lua, no
+terminal config and no `vscode.json` — nothing `omarchy theme install` strips,
+so a repo install and a local working copy produce the same desktop.
 
 ## Screenshots
 
@@ -69,51 +71,95 @@ Two deliberate deviations from the upstream terminal extras:
 - Window, notification, and menu borders use a `blue → cyan` 45° gradient
   (`hyprland_active_border`), with `bg_highlight` for inactive borders.
 
-## Liquid glass
+## Look'n'feel
 
-Omarchy ships `blur.enabled = false`, `shadow.enabled = false` and
-`rounding = 0`; `hyprland.lua` is what turns the glass on.
+The theme ships no Hyprland Lua. Omarchy 4 generates `hyprland.lua` from
+`colors.toml`, and the only thing this theme puts in it is the border colour:
 
-| Knob | Value | Why |
+| `colors.toml` key | Value | Result |
 | --- | --- | --- |
-| `decoration.rounding` | `8` | Slightly rounded — reads as glass, not as a pill. |
-| `decoration.blur` | `size 6`, `passes 3`, `brightness 0.75`, `contrast 1.15`, `vibrancy 0.25`, `noise 0.015` | Near-black neon palette: the backdrop is dimmed and lifted so a 4K wallpaper never competes with the text on top of it. |
-| `decoration.blur.ignore_opacity` | `true` | Apps that cannot render a transparent background themselves (Chromium-family, Electron) show blurred glass instead of raw wallpaper when Hyprland fades them. |
-| `decoration.shadow` | `range 16`, active `rgba(5ea1ff27)`, inactive `rgba(0b0c0d99)` | The focused window sits in a faint accent bloom; everything else gets plain depth. |
-| window opacity | `0.98 0.92` for Omarchy's `default-opacity` tag, `1.0 1.0` for terminals and video | Terminals carry their own alpha (`background_opacity`), so the compositor must not multiply it. |
-| borders | `#5ea1ff → #5ef1ff` at 45°, alpha `ee`/`bb`; inactive `#3c4048aa` | The palette's blue → cyan sweep, carried at glass alpha as a lit edge. |
-| layer blur | `omarchy-bar`, `-menu`, `-notifications`, `-osd`, `-clipboard`, `-emojis`, `-polkit`, `-reminders`, panels | Omarchy 4's Quickshell surfaces. The wallpaper layer and bar drag ghosts stay out. |
+| `hyprland_active_border` | `accent cyan 45deg` | focused window: `#5ea1ff → #5ef1ff` at 45°, also the group/tab border |
+| `hyprland_inactive_border` | `selection` | everything else: `#3c4048` |
+
+The rest of the window frame — `decoration.rounding`, blur, shadows, per-window
+opacity — belongs to your look'n'feel, not to a theme. Stock Omarchy 4 is flat:
+`rounding = 0`, `blur.enabled = false`, `shadow.enabled = false`, and every
+window faded to `0.985 / 0.96`. The theme is built to read well there.
 
 The shell surfaces themselves are translucent through the `shell.*.toml` files —
 bar `0.62`, launcher/notifications/popups `0.78`, menu `0.80`, tooltip `0.82`.
-Each file replaces one section of the `shell.toml` Omarchy generates, so their
+Each file replaces one section of the `shell.toml` Omarchy generates
+(`apply_shell_section_overrides` in `omarchy-theme-set-templates`), so their
 colours are literal rather than templated.
 
-### On a repo install, the Lua is dropped
+### Glass is opt-in
 
-`omarchy theme install` refuses code from a cloned theme, so Omarchy ignores
-`hyprland.lua` (it names the file on stderr) and generates a borders-only one
-from `colors.toml`. The `shell.*.toml` translucency survives; blur, rounding and
-shadows do not. Two ways to get them back:
+Earlier versions shipped a `hyprland.lua` that turned blur, rounding and
+shadows on — that is what the screenshots above show. It is gone:
+`omarchy theme install` refuses Lua from a cloned theme, so the file only ever
+worked for a local working copy, and a theme that silently reconfigures the
+compositor for everyone who tries it is the wrong shape. Put it in your own
+look'n'feel instead, where it survives a theme switch and you can see it:
 
-```bash
-# 1. Load the theme's file as your own look'n'feel. It then applies to every
-#    theme you switch to, so merge rather than clobber if that file is not empty.
-cp ~/.config/omarchy/themes/cyberdream/hyprland.lua ~/.config/hypr/looknfeel.lua
+```lua
+-- ~/.config/hypr/looknfeel.lua — loaded after the theme, so it wins.
+hl.config({
+  decoration = {
+    rounding = 8,
 
-# 2. Or point the theme directory at your own working copy. Omarchy only
-#    withholds Lua from a *directory* with a .git in it; a symlink is yours.
-git clone https://github.com/prdlk/omarchy-cyberdream
-ln -sfn "$PWD/omarchy-cyberdream" ~/.config/omarchy/themes/cyberdream
-omarchy theme set cyberdream
+    blur = {
+      enabled = true,
+      size = 6,
+      passes = 3,
+      -- Near-black neon palette: dim and lift the backdrop so a 4K wallpaper
+      -- never competes with the text on top of it.
+      brightness = 0.75,
+      contrast = 1.15,
+      vibrancy = 0.25,
+      noise = 0.015,
+      popups = true,
+      -- Chromium-family and Electron windows cannot paint a transparent
+      -- background themselves, so without this a faded one shows raw
+      -- wallpaper instead of blurred glass.
+      ignore_opacity = true,
+    },
+
+    shadow = {
+      enabled = true,
+      range = 10,
+      render_power = 3,
+      color = "rgba(5ea1ff1a)",
+      color_inactive = "rgba(0b0c0d88)",
+    },
+  },
+})
+
+-- Blur the Quickshell surfaces. A layer rule cannot blur unless the global
+-- switch above is on; `omarchy-background` is the wallpaper, so it stays out.
+hl.layer_rule({
+  match = {
+    namespace = "^omarchy-(bar|menu|notifications|osd|clipboard|emojis|polkit|reminders|image-selector|keyboard-panel|network-qr)$",
+  },
+  blur = true,
+  blur_popups = true,
+  ignore_alpha = 0.1,
+})
+
+-- Deepen the fade now that it reveals glass, but leave terminals alone: they
+-- carry their own alpha (kitty's `background_opacity`) and the compositor
+-- would multiply it.
+o.window({ tag = "default-opacity" }, { opacity = "0.98 0.92" })
+o.window({ tag = "terminal" }, { opacity = "1.0 1.0" })
 ```
+
+Blur is not free — three passes over a 4K-class output is measurable frame time
+on an iGPU. Drop `passes` to 2, or leave the block out entirely.
 
 ## What this theme ships
 
 | File | Purpose |
 | --- | --- |
-| `colors.toml` | The palette. Omarchy generates everything else from it. |
-| `hyprland.lua` | The glass: blur, rounded corners, shadows, borders, per-window opacity, layer blur. |
+| `colors.toml` | The palette. Omarchy generates everything else from it. [Flea](https://github.com/thisisgm/flea) reads it raw rather than through Omarchy's resolver, so `dark_background` is pinned there: it is Flea's sidebar, tab bar, status bar and menu plane, and the pin equals what Omarchy would derive anyway. |
 | `shell.bar.toml`, `shell.menu.toml`, `shell.launcher.toml`, `shell.popups.toml`, `shell.notifications.toml`, `shell.tooltip.toml` | Translucency for the Omarchy shell surfaces; each overrides one section of the generated `shell.toml`. |
 | `btop.theme` | Upstream cyberdream btop theme (cyan → purple graphs). |
 | `helix.toml` | Upstream cyberdream Helix theme. |
@@ -130,10 +176,10 @@ RGB. Nothing in this repo needs to duplicate those.
 
 A theme installed from a git repo may not ship code, so Omarchy drops any
 `*.lua`, terminal config, or `vscode.json` it finds and regenerates them from
-`colors.toml`. Of those, this repo ships only `hyprland.lua` — see
-[On a repo install, the Lua is dropped](#on-a-repo-install-the-lua-is-dropped).
-Neovim users who want the real thing can install
-[cyberdream.nvim](https://github.com/scottmckendry/cyberdream.nvim) directly.
+`colors.toml`. This repo ships none of those, so nothing is dropped and the
+stderr list on install stays empty. Neovim users who want the real palette can
+install [cyberdream.nvim](https://github.com/scottmckendry/cyberdream.nvim)
+directly.
 
 ## Extras
 
