@@ -14,7 +14,7 @@
  * rule, and `blur.ignore_opacity` makes the compositor blur what shows through.
  */
 
-@define-color background     #16181ae6;
+@define-color background     alpha(#16181a, 0.9);
 @define-color solid_background #16181a;
 @define-color surface        #1e2124;
 @define-color surface_dim    #111214;
